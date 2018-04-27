@@ -1,3 +1,7 @@
+/*
+Seam Carving Project
+Mavroidis Mavroidis 
+*/
 #include <iostream>
 #include <fstream>
 #include <iosfwd>
@@ -14,7 +18,7 @@ public:
 
 	SC() = default;
 
-	void print(std::vector<std::vector<int>> matrix);
+	void print(std::vector<std::vector<int>> mtx);
 	void get_hdr(std::ifstream& img);
 	void pop_pix_mtx(std::ifstream& img);
 	void pop_enr_mtx();
@@ -25,12 +29,14 @@ public:
 	void remove_v_seams(int v_seams);
 	void remove_h_seams(int horizontal_seams);
 	void write(std::ofstream& output);
+	void rotate();
 
 private:
 
 	std::vector<std::vector<int>> pix_mtx;
 	std::vector<std::vector<int>> enr_mtx;
 	std::vector<std::vector<int>> cume_mtx;
+	std::vector<std::vector<int>> rot_mtx;
 	std::map<int, int> pos;
 	std::string hdr, dim, grey_max;
 	int	w, h;
@@ -81,6 +87,8 @@ int main(int argc, char** argv) {
 
 	img.close();
 	img_proc.close();
+
+	sc.rotate();
 
 	return 0;
 }
@@ -317,6 +325,31 @@ auto SC::find_min_col() {
 	}
 }
 
+void SC::rotate() {
+	rot_mtx.resize(h);
+	for (int i = 0; i < h; i++)
+		rot_mtx[i].resize(w);
+
+
+	for (int x = 0; x < w; x++) {
+		rot_mtx[0][x] = cume_mtx[0][x];
+	}
+	for (int i = 0; i<w; i++) {
+		for (int j = 0; j<h; j++) {
+			rot_mtx[i][j] = cume_mtx[h- 1 - j][i];
+		}
+	}
+
+
+	for (int y = 0; y <w; y++) {
+		for (int x = 0; x < h; x++)
+			std::cout << rot_mtx[y][x] << " ";
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
+}
+
 //Find horizontal seams 
 void SC::find_h_seams() {
 
@@ -325,6 +358,8 @@ void SC::find_h_seams() {
 	std::vector<int> comp;
 	auto min_iter = find_min_col();
 	pos.clear();
+
+
 
 
 	for (int y = 0; y < h; y++) {
