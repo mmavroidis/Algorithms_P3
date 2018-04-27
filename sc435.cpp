@@ -81,6 +81,7 @@ int main(int argc, char** argv) {
 	SC sc;
 	sc.get_hdr(img);
 	sc.pop_pix_mtx(img);
+	sc.rotate();
 	sc.remove_v_seams(atoi(argv[2]));
 	sc.remove_h_seams(atoi(argv[3]));
 	sc.write(img_proc);
@@ -88,7 +89,7 @@ int main(int argc, char** argv) {
 	img.close();
 	img_proc.close();
 
-	sc.rotate();
+
 
 	return 0;
 }
