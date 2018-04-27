@@ -326,21 +326,18 @@ auto SC::find_min_col() {
 }
 
 void SC::rotate() {
-	rot_mtx.resize(h);
-	for (int i = 0; i < h; i++)
-		rot_mtx[i].resize(w);
+	rot_mtx.resize(w);
+//	rotated_matrix.resize(width);
+	for (int i = 0; i < w; i++)
+		rot_mtx[i].resize(h);
+
+	for (int i = 0; i < w; i++)
+		for (int j = 0; j < h; j++)
+			rot_mtx[i][j] = cume_mtx[h - 1 - j][i];
 
 
-	for (int x = 0; x < w; x++) {
-		rot_mtx[0][x] = cume_mtx[0][x];
-	}
-	for (int i = 0; i<w; i++) {
-		for (int j = 0; j<h; j++) {
-			rot_mtx[i][j] = cume_mtx[h- 1 - j][i];
-		}
-	}
 
-
+	//Print 
 	for (int y = 0; y <w; y++) {
 		for (int x = 0; x < h; x++)
 			std::cout << rot_mtx[y][x] << " ";
